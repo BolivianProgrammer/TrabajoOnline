@@ -56,6 +56,23 @@
     </div>
 </div>
 
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <h2>🧩</h2>
+                <h3>Pruebas por Género</h3>
+                <p>Acceso restringido por género usando policies.</p>
+                <div class="d-flex justify-content-center gap-2 flex-wrap">
+                    <a asp-controller="Genero" asp-action="MasculinoOnly" class="btn btn-outline-primary">Solo Masculino</a>
+                    <a asp-controller="Genero" asp-action="FemeninoOnly" class="btn btn-outline-danger">Solo Femenino</a>
+                    <a asp-controller="Genero" asp-action="OtroOnly" class="btn btn-outline-secondary">Solo Otro</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @if (!User.Identity.IsAuthenticated)
 {
     <div class="alert alert-info mt-5 text-center">

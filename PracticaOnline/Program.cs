@@ -48,6 +48,10 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("AdminOUsuario", policy =>
         policy.RequireRole("Admin", "Usuario"));
 
+    // Gender-only policies used by GeneroController and the Home links
+    options.AddPolicy("SoloMasculino", policy => policy.RequireClaim("Genero", "Masculino"));
+    options.AddPolicy("SoloFemenino", policy => policy.RequireClaim("Genero", "Femenino"));
+    options.AddPolicy("SoloOtro", policy => policy.RequireClaim("Genero", "Otro"));
 });
 
 

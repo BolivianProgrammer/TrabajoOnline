@@ -41,12 +41,23 @@ namespace NetIdentity.Data
                     await userManager.AddToRoleAsync(adminUser, "Admin");
                     await userManager.AddClaimAsync(adminUser,
                         new System.Security.Claims.Claim("FechaNacimiento", adminUser.FechaNacimiento.ToString("yyyy-MM-dd")));
+                    await userManager.AddClaimAsync(adminUser,
+                        new System.Security.Claims.Claim("Genero", adminUser.genero!));
                 }
             }
-            else if (string.IsNullOrWhiteSpace(adminExisting.genero))
+            else
             {
-                adminExisting.genero = "Otro";
-                await userManager.UpdateAsync(adminExisting);
+                if (string.IsNullOrWhiteSpace(adminExisting.genero))
+                {
+                    adminExisting.genero = "Otro";
+                    await userManager.UpdateAsync(adminExisting);
+                }
+                var claims = await userManager.GetClaimsAsync(adminExisting);
+                if (!claims.Any(c => c.Type == "Genero"))
+                {
+                    await userManager.AddClaimAsync(adminExisting,
+                        new System.Security.Claims.Claim("Genero", adminExisting.genero ?? "Otro"));
+                }
             }
 
             // Usuario menor
@@ -69,12 +80,23 @@ namespace NetIdentity.Data
                     await userManager.AddToRoleAsync(userMenor, "Usuario");
                     await userManager.AddClaimAsync(userMenor,
                         new System.Security.Claims.Claim("FechaNacimiento", userMenor.FechaNacimiento.ToString("yyyy-MM-dd")));
+                    await userManager.AddClaimAsync(userMenor,
+                        new System.Security.Claims.Claim("Genero", userMenor.genero!));
                 }
             }
-            else if (string.IsNullOrWhiteSpace(userMenorExisting.genero))
+            else
             {
-                userMenorExisting.genero = "Masculino";
-                await userManager.UpdateAsync(userMenorExisting);
+                if (string.IsNullOrWhiteSpace(userMenorExisting.genero))
+                {
+                    userMenorExisting.genero = "Masculino";
+                    await userManager.UpdateAsync(userMenorExisting);
+                }
+                var claims = await userManager.GetClaimsAsync(userMenorExisting);
+                if (!claims.Any(c => c.Type == "Genero"))
+                {
+                    await userManager.AddClaimAsync(userMenorExisting,
+                        new System.Security.Claims.Claim("Genero", userMenorExisting.genero ?? "Masculino"));
+                }
             }
 
             // Usuario mayor
@@ -97,12 +119,23 @@ namespace NetIdentity.Data
                     await userManager.AddToRoleAsync(userMayor, "Usuario");
                     await userManager.AddClaimAsync(userMayor,
                         new System.Security.Claims.Claim("FechaNacimiento", userMayor.FechaNacimiento.ToString("yyyy-MM-dd")));
+                    await userManager.AddClaimAsync(userMayor,
+                        new System.Security.Claims.Claim("Genero", userMayor.genero!));
                 }
             }
-            else if (string.IsNullOrWhiteSpace(userMayorExisting.genero))
+            else
             {
-                userMayorExisting.genero = "Femenino";
-                await userManager.UpdateAsync(userMayorExisting);
+                if (string.IsNullOrWhiteSpace(userMayorExisting.genero))
+                {
+                    userMayorExisting.genero = "Femenino";
+                    await userManager.UpdateAsync(userMayorExisting);
+                }
+                var claims = await userManager.GetClaimsAsync(userMayorExisting);
+                if (!claims.Any(c => c.Type == "Genero"))
+                {
+                    await userManager.AddClaimAsync(userMayorExisting,
+                        new System.Security.Claims.Claim("Genero", userMayorExisting.genero ?? "Femenino"));
+                }
             }
         }
     }
