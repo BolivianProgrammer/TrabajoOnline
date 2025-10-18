@@ -29,18 +29,21 @@ namespace NetIdentity.Data.Migrations
                 oldType: "nvarchar(128)",
                 oldMaxLength: 128);
 
-            migrationBuilder.AddColumn<DateTime>(
-                name: "FechaNacimiento",
-                table: "AspNetUsers",
-                type: "datetime2",
-                nullable: false,
-                defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
+            // Add FechaNacimiento only if it doesn't exist already
+            migrationBuilder.Sql(@"
+IF COL_LENGTH('dbo.AspNetUsers', 'FechaNacimiento') IS NULL
+BEGIN
+    ALTER TABLE [dbo].[AspNetUsers]
+        ADD [FechaNacimiento] [datetime2] NOT NULL CONSTRAINT [DF_AspNetUsers_FechaNacimiento] DEFAULT ('0001-01-01T00:00:00.0000000');
+END");
 
-            migrationBuilder.AddColumn<string>(
-                name: "NombreCompleto",
-                table: "AspNetUsers",
-                type: "nvarchar(max)",
-                nullable: true);
+            // Add NombreCompleto only if it doesn't exist already
+            migrationBuilder.Sql(@"
+IF COL_LENGTH('dbo.AspNetUsers', 'NombreCompleto') IS NULL
+BEGIN
+    ALTER TABLE [dbo].[AspNetUsers]
+        ADD [NombreCompleto] [nvarchar](max) NULL;
+END");
 
             migrationBuilder.AlterColumn<string>(
                 name: "ProviderKey",
@@ -64,13 +67,19 @@ namespace NetIdentity.Data.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "FechaNacimiento",
-                table: "AspNetUsers");
+            // Drop FechaNacimiento if it exists
+            migrationBuilder.Sql(@"
+IF COL_LENGTH('dbo.AspNetUsers', 'FechaNacimiento') IS NOT NULL
+BEGIN
+    ALTER TABLE [dbo].[AspNetUsers] DROP COLUMN [FechaNacimiento];
+END");
 
-            migrationBuilder.DropColumn(
-                name: "NombreCompleto",
-                table: "AspNetUsers");
+            // Drop NombreCompleto if it exists
+            migrationBuilder.Sql(@"
+IF COL_LENGTH('dbo.AspNetUsers', 'NombreCompleto') IS NOT NULL
+BEGIN
+    ALTER TABLE [dbo].[AspNetUsers] DROP COLUMN [NombreCompleto];
+END");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Name",

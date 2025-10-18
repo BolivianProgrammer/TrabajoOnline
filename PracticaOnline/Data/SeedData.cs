@@ -11,7 +11,6 @@ namespace NetIdentity.Data
             var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             var context = serviceProvider.GetRequiredService<ApplicationDbContext>();
 
-            context.Database.EnsureCreated();
 
             string[] roleNames = { "Admin", "Usuario" };
             foreach (var roleName in roleNames)
