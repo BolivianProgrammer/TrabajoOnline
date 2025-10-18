@@ -21,7 +21,9 @@ namespace NetIdentity.Data
                 }
             }
 
-            if (await userManager.FindByEmailAsync("admin@test.com") == null)
+            // Admin
+            var adminExisting = await userManager.FindByEmailAsync("admin@test.com");
+            if (adminExisting == null)
             {
                 var adminUser = new ApplicationUser
                 {
@@ -29,7 +31,8 @@ namespace NetIdentity.Data
                     Email = "admin@test.com",
                     FechaNacimiento = DateTime.Now.AddYears(-30),
                     NombreCompleto = "Administrador Sistema",
-                    EmailConfirmed = true
+                    EmailConfirmed = true,
+                    genero = "Otro"
                 };
 
                 var result = await userManager.CreateAsync(adminUser, "Admin123!");
@@ -40,8 +43,15 @@ namespace NetIdentity.Data
                         new System.Security.Claims.Claim("FechaNacimiento", adminUser.FechaNacimiento.ToString("yyyy-MM-dd")));
                 }
             }
+            else if (string.IsNullOrWhiteSpace(adminExisting.genero))
+            {
+                adminExisting.genero = "Otro";
+                await userManager.UpdateAsync(adminExisting);
+            }
 
-            if (await userManager.FindByEmailAsync("menor@test.com") == null)
+            // Usuario menor
+            var userMenorExisting = await userManager.FindByEmailAsync("menor@test.com");
+            if (userMenorExisting == null)
             {
                 var userMenor = new ApplicationUser
                 {
@@ -49,7 +59,8 @@ namespace NetIdentity.Data
                     Email = "menor@test.com",
                     FechaNacimiento = DateTime.Now.AddYears(-15),
                     NombreCompleto = "Juan Menor",
-                    EmailConfirmed = true
+                    EmailConfirmed = true,
+                    genero = "Masculino"
                 };
 
                 var result = await userManager.CreateAsync(userMenor, "Menor123!");
@@ -60,8 +71,15 @@ namespace NetIdentity.Data
                         new System.Security.Claims.Claim("FechaNacimiento", userMenor.FechaNacimiento.ToString("yyyy-MM-dd")));
                 }
             }
+            else if (string.IsNullOrWhiteSpace(userMenorExisting.genero))
+            {
+                userMenorExisting.genero = "Masculino";
+                await userManager.UpdateAsync(userMenorExisting);
+            }
 
-            if (await userManager.FindByEmailAsync("mayor@test.com") == null)
+            // Usuario mayor
+            var userMayorExisting = await userManager.FindByEmailAsync("mayor@test.com");
+            if (userMayorExisting == null)
             {
                 var userMayor = new ApplicationUser
                 {
@@ -69,7 +87,8 @@ namespace NetIdentity.Data
                     Email = "mayor@test.com",
                     FechaNacimiento = DateTime.Now.AddYears(-25),
                     NombreCompleto = "María Mayor",
-                    EmailConfirmed = true
+                    EmailConfirmed = true,
+                    genero = "Femenino"
                 };
 
                 var result = await userManager.CreateAsync(userMayor, "Mayor123!");
@@ -79,6 +98,11 @@ namespace NetIdentity.Data
                     await userManager.AddClaimAsync(userMayor,
                         new System.Security.Claims.Claim("FechaNacimiento", userMayor.FechaNacimiento.ToString("yyyy-MM-dd")));
                 }
+            }
+            else if (string.IsNullOrWhiteSpace(userMayorExisting.genero))
+            {
+                userMayorExisting.genero = "Femenino";
+                await userManager.UpdateAsync(userMayorExisting);
             }
         }
     }
